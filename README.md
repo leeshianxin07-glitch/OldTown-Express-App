@@ -1,17 +1,13 @@
-# OldTown Express Multi-Page Demo
+# OldTown Express Multi-Page Demo (Fixed)
 
-A simple 3-page prototype that simulates a fast "Grab & Go" order flow.
+This version has **menu.html renamed to index.html**, so it works directly on GitHub Pages.
 
 ## Pages
-1. **menu.html** — choose drinks, add to cart, place order.
-2. **preparing.html** — shows "Your order is being prepared..." with a 3-second countdown and progress bar.
-3. **ready.html** — shows "Your order is ready to collect!" with order summary.
+- **index.html** — menu page (default homepage)
+- **preparing.html** — "Your order is being prepared..."
+- **ready.html** — "Your order is ready to collect!"
 
 ## Usage
-- Open `menu.html` in a browser.
-- Select items, place order → auto redirects to preparing → auto redirects to ready.
-- Fully in English, lightweight HTML/CSS/JS only.
-
-## Notes
-- No server needed, works offline.
-- LocalStorage is used to pass order summary between pages.
+- Upload all files to GitHub repository root.
+- Enable GitHub Pages (Settings → Pages → Branch: main, Folder: /root).
+- Visit: https://USERNAME.github.io/REPOSITORY/
