@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preparing Order</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:20px; background:#fdfdfd; color:#333; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;}
+    h1 { margin-bottom:20px;}
+    .progress{width:80%;height:20px;background:#eee;border-radius:10px;overflow:hidden;}
+    .bar{height:100%;width:0;background:#2ecc71;transition:width .2s;}
+  </style>
+</head>
+<body>
+  <h1>Your order is being prepared...</h1>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <p id="countdown">3</p>
+
+<script>
+let ms=3000;
+const bar=document.getElementById('bar');
+const countdown=document.getElementById('countdown');
+const t0=performance.now();
+
+function tick(){
+  const elapsed=performance.now()-t0;
+  const p=Math.min(1,elapsed/ms);
+  bar.style.width=(p*100).toFixed(0)+'%';
+  const left=Math.ceil((ms-elapsed)/1000);
+  countdown.textContent=Math.max(0,left);
+  if(p<1){ requestAnimationFrame(tick);} else {
+    window.location.href='ready.html';
+  }
+}
+tick();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OldTown Express — Menu</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:20px; background:#fafafa; color:#333;}
+    h1 { text-align:center; }
+    .menu { display:grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap:16px; margin-top:20px;}
+    .card { background:white; border:1px solid #ddd; border-radius:8px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;}
+    .row { display:flex; justify-content:space-between; align-items:center;}
+    .price { font-weight:bold;}
+    button { padding:8px 12px; border:none; border-radius:6px; background:#222; color:white; cursor:pointer; margin-top:10px;}
+    button:hover { background:#444; }
+    #cart { margin-top:20px; padding:12px; background:#fff; border:1px solid #ddd; border-radius:8px;}
+  </style>
+</head>
+<body>
+  <h1>OldTown Express Menu</h1>
+  <div class="menu" id="menu"></div>
+  <div id="cart">
+    <h3>Cart</h3>
+    <div id="cartList"></div>
+    <div style="margin-top:10px; display:flex; justify-content:space-between;">
+      <strong>Total:</strong><span id="subtotal">$0.00</span>
+    </div>
+    <button id="checkout">Place Order</button>
+  </div>
+
+<script>
+const MENU = [
+  {id:'kopi-o', name:'Kopi O', price:4.50},
+  {id:'kopi-c', name:'Kopi C', price:5.50},
+  {id:'white', name:'White Coffee', price:6.90},
+  {id:'americano', name:'Americano', price:7.50},
+  {id:'latte', name:'Latte', price:8.90},
+  {id:'capp', name:'Cappuccino', price:8.90},
+  {id:'teh', name:'Teh C', price:5.20},
+  {id:'milo', name:'Milo Ice', price:6.00}
+];
+
+const cart = new Map();
+const fmt = n => '$' + n.toFixed(2);
+
+function renderMenu(){
+  const $menu = document.getElementById('menu');
+  MENU.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="row"><strong>${item.name}</strong><span class="price">${fmt(item.price)}</span></div>
+      <button data-id="${item.id}">Add to Cart</button>
+    `;
+    $menu.appendChild(card);
+  });
+  $menu.addEventListener('click', e=>{
+    const btn = e.target.closest('button[data-id]');
+    if(!btn) return;
+    const id = btn.dataset.id;
+    const item = MENU.find(m=>m.id===id);
+    const q = (cart.get(id)?.qty||0)+1;
+    cart.set(id,{item, qty:q});
+    renderCart();
+  });
+}
+
+function renderCart(){
+  const $list = document.getElementById('cartList');
+  $list.innerHTML='';
+  let total=0;
+  cart.forEach(({item, qty})=>{
+    total += item.price*qty;
+    const div=document.createElement('div');
+    div.textContent=`${item.name} × ${qty}`;
+    $list.appendChild(div);
+  });
+  document.getElementById('subtotal').textContent=fmt(total);
+}
+
+document.getElementById('checkout').addEventListener('click',()=>{
+  if(cart.size===0){alert('Your cart is empty!');return;}
+  const order = [];
+  cart.forEach(({item,qty})=> order.push({name:item.name, qty}));
+  localStorage.setItem('order', JSON.stringify(order));
+  window.location.href='preparing.html';
+});
+
+renderMenu();
+</script>
+</body>
+</html>
